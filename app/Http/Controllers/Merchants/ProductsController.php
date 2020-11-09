@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Merchants;
 
 use App\Http\Controllers\Controller;

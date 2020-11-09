@@ -6,14 +6,36 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\LandResource;
 use App\Models\Land;
 use App\Models\LandImage;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class LandsController extends Controller
 {
-    public function get()
+    public function get(Request $request)
     {
-        return LandResource::collection(Land::all());
+        $validator = Validator::make($request->all(), [
+            'crop' => 'required',
+            'location' => "required",
+            'price' => "required|integer",
+        ]);
+
+        if ($validator->fails()) {
+            return LandResource::collection(Land::all());
+        }
+        $crops = $request->input('crop', "");
+        $location = $request->input('location', "");
+        $price = $request->input('price', 0);
+
+        $land = Land::where('crops', "LIKE", "%${crops}%")
+            ->where('name', "LIKE", "%${location}%")
+            ->where('price', "<=", "${price}");
+
+        if ($land->first())
+            return LandResource::collection($land->get());
+        return response()->json([]);
     }
 
     public function getDetail($id)
