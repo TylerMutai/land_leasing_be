@@ -53,6 +53,11 @@ Route::group(['middleware' => ['api_json']], function () {
 
     Route::get('products/image/{id}', 'Users\ProductsController@getImage');
 
+    Route::get('location/search', 'Users\LocationsController@search');
+
+    Route::get('blogs', 'Admin\BlogsController@get');
+
+    Route::get('blogs/{id}', 'Admin\BlogsController@getDetail');
 
 
     //User routes
@@ -61,6 +66,8 @@ Route::group(['middleware' => ['api_json']], function () {
 
         Route::group(['middleware' => ['auth:api', 'verified']], function () {
             Route::group(['middleware' => ["role:" . Roles::$USER]], function () {
+
+                Route::post('lands/buy','Users\LandsController@buy');
 
                 Route::group(['prefix' => 'mpesa'], function () {
                     Route::get('confirm?secret=rsWsX127qunXNYcw', 'Mpesa\MpesaController@confirm');
@@ -83,6 +90,8 @@ Route::group(['middleware' => ['api_json']], function () {
 
                 //Lands
                 Route::patch('lands', 'Farmers\LandsController@update');
+
+                Route::get('lands', 'Farmers\LandsController@get');
 
                 Route::post('lands', 'Farmers\LandsController@upload');
 
@@ -120,6 +129,16 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::group(['middleware' => ['auth:api']], function () {
         Route::group(['middleware' => ["role:" . Roles::$ADMIN]], function () {
+
+            Route::post('blogs', 'Admin\BlogsController@upload');
+
+            Route::patch('blogs/{id}', 'Admin\BlogsController@update');
+
+            Route::delete('blogs/{id}', 'Admin\BlogsController@delete');
+
+            Route::get('blogs', 'Admin\BlogsController@get');
+
+            Route::get('blogs/{id}', 'Admin\BlogsController@getDetail');
 
         });
     });

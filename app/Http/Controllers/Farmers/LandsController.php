@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Farmers;
 
+use App\Http\Constants\LandStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\LandResource;
 use App\Http\Resources\LandImageResource;
@@ -15,6 +16,24 @@ use Illuminate\Support\Facades\Validator;
 
 class LandsController extends Controller
 {
+    public function get(Request $request)
+    {
+        $land = Land::where('farmer_id',
+            Auth::guard('api')->user()->id);
+        $request_params = $request->all();
+        if (sizeof($request_params) > 0) {
+            $array_keys = array_keys($request_params);
+
+            for ($i = 0; $i < sizeof($array_keys); $i++) {
+                $key = $array_keys[$i];
+                if (strlen($request_params[$key]) > 0)
+                    $land = $land->where($key, $request_params[$key]);
+            }
+        }
+        return LandResource::collection($land->get());
+    }
+
+
     public function uploadImage(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -54,6 +73,7 @@ class LandsController extends Controller
             'price' => "required|integer",
             'description' => "required",
             'size' => "required",
+            'lease_period' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -70,7 +90,9 @@ class LandsController extends Controller
         $landModel->name = $request->input('name');
         $landModel->description = $request->input('description');
         $landModel->size = $request->input('size');
+        $landModel->lease_period = $request->input('lease_period');
         $landModel->farmer_id = $user->id;
+        $landModel->status = LandStatus::$AVAILABLE;
         if ($landModel->save()) {
             return new LandResource($landModel);
         }
@@ -84,24 +106,35 @@ class LandsController extends Controller
         if ($landModel->first()) {
             $landModel = $landModel->first();
             if ($request->input('lat', 'yes') !== "yes")
-                $landModel->access_token = $request->input('lat');
+                $landModel->lat = $request->input('lat');
             if ($request->input('lon', 'yes') !== "yes")
-                $landModel->calendar_id = $request->input('lon');
+                $landModel->lon = $request->input('lon');
             if ($request->input('crops', 'yes') !== "yes")
-                $landModel->calendar_id = $request->input('crops');
+                $landModel->crops = $request->input('crops');
             if ($request->input('description', 'yes') !== "yes")
-                $landModel->calendar_id = $request->input('description');
+                $landModel->description = $request->input('description');
             if ($request->input('price', 'yes') !== "yes")
-                $landModel->calendar_id = $request->input('price');
+                $landModel->price = $request->input('price');
             if ($request->input('size', 'yes') !== "yes")
-                $landModel->calendar_id = $request->input('size');
+                $landModel->size = $request->input('size');
+            if ($request->input('lease_period', 'yes') !== "yes")
+                $landModel->lease_period = $request->input('lease_period');
+            if ($request->input('status', 'yes') !== "yes") {
+                if ($request->input('status') != LandStatus::$AVAILABLE
+                    && $request->input('status') != LandStatus::$PENDING
+                    && $request->input('status') != LandStatus::$SOLD) {
+                    return response()->json(["errors" => ["status" => ["The status supplied is invalid"]]], 400);
+                }
+                $landModel->calendar_id = $request->input('status');
+            }
+
 
             if ($landModel->save()) {
                 return response()->json(new LandResource($landModel));
             }
         }
 
-        return response()->json(["message" => "Could not update land"], 400);
+        return response()->json(["message" => "Could not update land"], 500);
     }
 
     public function delete($id)
