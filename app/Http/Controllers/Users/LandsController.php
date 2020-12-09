@@ -20,7 +20,11 @@ class LandsController extends Controller
     public function get(Request $request)
     {
         //This is for searching lands according to specified parameters.
+<<<<<<< HEAD
        /* $validator = Validator::make($request->all(), [
+=======
+        $validator = Validator::make($request->all(), [
+>>>>>>> 76fa374a907127ba5d8b9888d4b55d0561107667
             'crop' => 'required',
             'location' => "required",
             'price' => "required|integer",
@@ -28,6 +32,7 @@ class LandsController extends Controller
 
         if ($validator->fails()) {
             return LandResource::collection(Land::where('status', LandStatus::$AVAILABLE)->get());
+<<<<<<< HEAD
         } */
         $crops = $request->input('crop', "");
         $location = $request->input('location', "");
@@ -51,6 +56,21 @@ class LandsController extends Controller
         }
            
          return LandResource::collection($land->get());
+=======
+        }
+        $crops = $request->input('crop', "");
+        $location = $request->input('location', "");
+        $price = $request->input('price', 0);
+
+        $land = Land::where('crops', "LIKE", "%${crops}%")
+            ->where('status', LandStatus::$AVAILABLE)
+            ->where('name', "LIKE", "%${location}%")
+            ->where('price', "<=", "${price}");
+
+        if ($land->first())
+            return LandResource::collection($land->get());
+        return response()->json([]);
+>>>>>>> 76fa374a907127ba5d8b9888d4b55d0561107667
     }
 
     public function getDetail($id)
@@ -60,6 +80,7 @@ class LandsController extends Controller
         return response()->json([], 404);
     }
 
+<<<<<<< HEAD
     public function markAsSold(Request $request){
         $validator = Validator::make($request->all(), [
             'land_id' => 'required',
@@ -76,6 +97,8 @@ class LandsController extends Controller
         }
     }
 
+=======
+>>>>>>> 76fa374a907127ba5d8b9888d4b55d0561107667
     public function buy(Request $request)
     {
         //This is for searching lands according to specified parameters.
@@ -91,6 +114,7 @@ class LandsController extends Controller
         if ($land) {
             if ($land->status != LandStatus::$AVAILABLE)
                 return response()->json(["message" => "Land already taken."], 405);
+<<<<<<< HEAD
                 if ($land->price > 75000)
                 return response()->json(["message" => "Amounts greater than 75000 cannot be paid via MPesa"], 405);
 
@@ -108,6 +132,22 @@ class LandsController extends Controller
             ->setCommand("CustomerPayBillOnline")
             ->push();
         return response()->json($response);
+=======
+            $land->status = LandStatus::$SOLD;
+
+            $phone = Auth::guard('api')->user()->phone_number;
+            if (substr($phone, 0, 1) == "0")
+                $phone = "254" . substr($phone, 1);
+            if ($land->price > 75000)
+                return response()->json(["message" => "Amounts greater than 75000 cannot be paid via MPesa"], 405);
+            STK::request($land->price)
+                ->from($phone)
+                ->usingReference('STK300521', 'Land Purchase: ' . $land->name)
+                ->push();
+            if ($land->save()) {
+                return response()->json(["message" => "Land bought successfully!"]);
+            }
+>>>>>>> 76fa374a907127ba5d8b9888d4b55d0561107667
         }
         return response()->json(["message" => "not found."], 404);
     }
