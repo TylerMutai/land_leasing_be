@@ -6,10 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
-<<<<<<< HEAD
 use App\Http\Controllers\Users\LandsController;
-=======
->>>>>>> 76fa374a907127ba5d8b9888d4b55d0561107667
 
 //use SmoDav\Mpesa\Laravel\Facades\Registrar;
 use SmoDav\Mpesa\Laravel\Facades\STK;
@@ -49,7 +46,6 @@ class MpesaController extends Controller
         return response()->json();
     }
 
-<<<<<<< HEAD
     public function validateMpesaSTKPush(Request $request)
     {
         $response = STK::validate($request->input('request_id', 'wagwan'));
@@ -62,10 +58,5 @@ class MpesaController extends Controller
             return response()->json(["message" => $response->ResultDesc], 400);
         }
         return response()->json(["message" => "It looks like you pressed confirm before first completing the prompt. Please try again."], 400);
-=======
-    public function validateMpesa()
-    {
-        return response()->json();
->>>>>>> 76fa374a907127ba5d8b9888d4b55d0561107667
     }
 }

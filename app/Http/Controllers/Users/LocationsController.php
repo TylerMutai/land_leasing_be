@@ -33,10 +33,7 @@ class LocationsController extends Controller
         if ($response->getStatusCode() == 200) {
             return $response->getBody();
         } else {
-<<<<<<< HEAD
 	    error_log($response->getBody());
-=======
->>>>>>> 76fa374a907127ba5d8b9888d4b55d0561107667
             return response()->json(['message' => 'Unauthorised. Wrong username or password'], 401);
         }
 

@@ -18,11 +18,7 @@ class RegistrationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-<<<<<<< HEAD
             'phone_number' => 'required|unique:users',
-=======
-            'phone_number' => 'required|unique:users|integer',
->>>>>>> 76fa374a907127ba5d8b9888d4b55d0561107667
             'email' => 'required|email|unique:users',
             'password' => ['required',
                 'min:6',
