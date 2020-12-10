@@ -70,11 +70,9 @@ Route::group(['middleware' => ['api_json']], function () {
                 Route::post('lands/buy','Users\LandsController@buy');
 
                 Route::group(['prefix' => 'mpesa'], function () {
-<<<<<<< HEAD
+
                     Route::post('validate','Mpesa\MpesaController@validateMpesaSTKPush');
 
-=======
->>>>>>> 76fa374a907127ba5d8b9888d4b55d0561107667
                     Route::get('confirm?secret=rsWsX127qunXNYcw', 'Mpesa\MpesaController@confirm');
 
                     Route::get('validate?secret=rsWsX127qunXNYcw', 'Mpesa\MpesaController@validateMpesa');
@@ -144,12 +142,9 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('blogs', 'Admin\BlogsController@get');
 
             Route::get('blogs/{id}', 'Admin\BlogsController@getDetail');
-
-<<<<<<< HEAD
+            
             Route::get('lands','Admin\LandsController@get');
 
-=======
->>>>>>> 76fa374a907127ba5d8b9888d4b55d0561107667
         });
     });
 });
