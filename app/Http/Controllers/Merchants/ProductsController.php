@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Merchants;
 
 use App\Http\Controllers\Controller;
@@ -12,6 +13,11 @@ use Illuminate\Support\Facades\Validator;
 
 class ProductsController extends Controller
 {
+    public function get()
+    {
+        return ProductResource::collection(Product::where('merchant_id', Auth::guard('api')->user()->id)->get());
+    }
+
     public function upload(Request $request)
     {
         $validator = Validator::make($request->all(), [

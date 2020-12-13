@@ -32,6 +32,7 @@ class UserResource extends JsonResource
             "phone_number" => $this->phone_number,
             "profile_photo_url" => $this->profile_photo_url,
             'role' => $role,
+            'active' => $this->active,
         ];
     }
 }

@@ -67,11 +67,13 @@ Route::group(['middleware' => ['api_json']], function () {
         Route::group(['middleware' => ['auth:api', 'verified']], function () {
             Route::group(['middleware' => ["role:" . Roles::$USER]], function () {
 
-                Route::post('lands/buy','Users\LandsController@buy');
+                Route::post('lands/buy', 'Users\LandsController@buy');
+
+                Route::get('lands', 'Users\LandsController@getMyLands');
 
                 Route::group(['prefix' => 'mpesa'], function () {
 
-                    Route::post('validate','Mpesa\MpesaController@validateMpesaSTKPush');
+                    Route::post('validate', 'Mpesa\MpesaController@validateMpesaSTKPush');
 
                     Route::get('confirm?secret=rsWsX127qunXNYcw', 'Mpesa\MpesaController@confirm');
 
@@ -100,6 +102,8 @@ Route::group(['middleware' => ['api_json']], function () {
 
                 Route::post('lands/{id}', 'Users\LandsController@getDetail');
 
+                Route::post('lands/deactivate/{id}', 'Farmers\LandsController@deactivate');
+
                 Route::post('lands/image/{id}', 'Farmers\LandsController@uploadImage');
 
                 Route::delete('lands/{id}', 'Farmers\LandsController@delete');
@@ -118,6 +122,8 @@ Route::group(['prefix' => 'merchants'], function () {
 
             //Products
             Route::patch('products', 'Merchants\ProductsController@update');
+
+            Route::get('products', 'Merchants\ProductsController@get');
 
             Route::post('products', 'Merchants\ProductsController@upload');
 
@@ -142,8 +148,16 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('blogs', 'Admin\BlogsController@get');
 
             Route::get('blogs/{id}', 'Admin\BlogsController@getDetail');
-            
-            Route::get('lands','Admin\LandsController@get');
+
+            Route::get('lands/bought', 'Admin\LandsController@getBought');
+
+            Route::get('lands', 'Admin\LandsController@get');
+
+            Route::get('products', 'Admin\ProductsController@get');
+
+            Route::get('users', 'Admin\UsersController@get');
+
+            Route::get('users/{id}', 'Admin\UsersController@delete');
 
         });
     });

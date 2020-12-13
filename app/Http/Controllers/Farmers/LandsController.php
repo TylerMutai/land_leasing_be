@@ -33,6 +33,19 @@ class LandsController extends Controller
         return LandResource::collection($land->get());
     }
 
+    public function deactivate($id)
+    {
+        $land = Land::findOrFail($id);
+        if ($land->active == 0)
+            $land->active = 1;
+        else
+            $land->active = 0;
+        if ($land->save()) {
+            return response()->json(["message" => "Land deactivated successfully"]);
+        }
+        return response()->json(["message" => "Could not deactivate land"]);
+    }
+
 
     public function uploadImage(Request $request, $id)
     {

@@ -35,11 +35,10 @@ class LoginController extends Controller
                     "The verification email has been resent to your email address"], 401);
             }
 
-           /* if ($user->is_active == 0) {
+            if ($user->active == 0) {
                 Auth::logout();
-                return response()->json(["message" => "Your account has not yet been verified. Please wait "
-                    . "until the verification process is complete."], 401);
-            }*/
+                return response()->json(["message" => "Your account has been deactivated. Contact support"], 401);
+            }
 
             $tokenResult = $user->createToken('Personal Access Token');
             $token = $tokenResult->token;

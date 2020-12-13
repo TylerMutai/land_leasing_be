@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\LandResource;
 use App\Models\Land;
 use App\Models\LandImage;
+use App\Models\UserLand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,40 +18,54 @@ use SmoDav\Mpesa\Laravel\Facades\STK;
 
 class LandsController extends Controller
 {
+    public function getMyLands()
+    {
+        $user = Auth::guard('api')->user();
+        $userLands = UserLand::where('user_id', $user->id)->get();
+        $lands = [];
+
+        foreach ($userLands as $land) {
+            array_push($lands, new LandResource(Land::find($land->id)));
+        }
+
+        return response()->json($lands);
+    }
+
     public function get(Request $request)
     {
         //This is for searching lands according to specified parameters.
-       /* $validator = Validator::make($request->all(), [
-            'crop' => 'required',
-            'location' => "required",
-            'price' => "required|integer",
-        ]);
+        /* $validator = Validator::make($request->all(), [
+             'crop' => 'required',
+             'location' => "required",
+             'price' => "required|integer",
+         ]);
 
-        if ($validator->fails()) {
-            return LandResource::collection(Land::where('status', LandStatus::$AVAILABLE)->get());
-        } */
+         if ($validator->fails()) {
+             return LandResource::collection(Land::where('status', LandStatus::$AVAILABLE)->get());
+         } */
         $crops = $request->input('crop', "");
         $location = $request->input('location', "");
         $price = $request->input('price', 0);
-       // DB::enableQueryLog();
+        // DB::enableQueryLog();
         $land = Land::where('status', LandStatus::$AVAILABLE);
-        
-        if(strlen($crops) > 0){
+        $land->where('active', 1);
+
+        if (strlen($crops) > 0) {
             error_log($crops);
             $land->where('crops', "LIKE", "%${crops}%");
         }
-           
-        if(strlen($location) > 0){
+
+        if (strlen($location) > 0) {
             error_log($location);
             $land->where('name', "LIKE", "%${location}%");
         }
-          
-        if($price > 0) {
+
+        if ($price > 0) {
             error_log($price);
             $land->where('price', "<=", "${price}");
         }
-           
-         return LandResource::collection($land->get());
+
+        return LandResource::collection($land->get());
     }
 
     public function getDetail($id)
@@ -60,7 +75,8 @@ class LandsController extends Controller
         return response()->json([], 404);
     }
 
-    public function markAsSold(Request $request){
+    public function markAsSold(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'land_id' => 'required',
         ]);
@@ -69,11 +85,18 @@ class LandsController extends Controller
             return response()->json(["message" => "The specified land does not exist"], 404);
         }
 
+        $user = Auth::guard('api')->user();
+
         $land = Land::find($request->input('land_id'));
         $land->status = LandStatus::$SOLD;
         if ($land->save()) {
-            return response()->json(["message" => "Land bought successfully!"]);
+            $userLand = new UserLand();
+            $userLand->user_id = $user->id;
+            $userLand->land_id = $land->id;
+            if ($userLand->save())
+                return response()->json(["message" => "Land bought successfully!"]);
         }
+        return response()->json(["message" => "Could not buy land"], 500);
     }
 
     public function buy(Request $request)
@@ -91,23 +114,23 @@ class LandsController extends Controller
         if ($land) {
             if ($land->status != LandStatus::$AVAILABLE)
                 return response()->json(["message" => "Land already taken."], 405);
-                if ($land->price > 75000)
+            if ($land->price > 75000)
                 return response()->json(["message" => "Amounts greater than 75000 cannot be paid via MPesa"], 405);
 
             $phone = Auth::guard('api')->user()->phone_number;
-                $phone = substr($phone, 0, 1) === "0"
-            ? "254" . substr($phone, 1)
-            : (substr($phone, 0, 3) !== "254"
-                ? "254" . $phone
-                : $phone);
-            
-        //TODO: Return $land->price
-        $response = STK::request(1)
-            ->from($phone)
-            ->usingReference('STK300521', 'Land Purchase: ' . $land->name)
-            ->setCommand("CustomerPayBillOnline")
-            ->push();
-        return response()->json($response);
+            $phone = substr($phone, 0, 1) === "0"
+                ? "254" . substr($phone, 1)
+                : (substr($phone, 0, 3) !== "254"
+                    ? "254" . $phone
+                    : $phone);
+
+            //TODO: Return $land->price
+            $response = STK::request(1)
+                ->from($phone)
+                ->usingReference('STK300521', 'Land Purchase: ' . $land->name)
+                ->setCommand("CustomerPayBillOnline")
+                ->push();
+            return response()->json($response);
         }
         return response()->json(["message" => "not found."], 404);
     }

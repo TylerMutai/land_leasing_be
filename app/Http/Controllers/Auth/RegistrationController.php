@@ -33,6 +33,7 @@ class RegistrationController extends Controller
             'name' => $request->name,
             'phone_number' => $request->phone_number,
             'email' => $request->email,
+            'active' => 1,
             'password' => Hash::make($request->password)
         ]);
 
@@ -43,17 +44,17 @@ class RegistrationController extends Controller
 
     public function registerFarmer(Request $request)
     {
-        return $this->saveUserToDb($request,Roles::$FARMER);
+        return $this->saveUserToDb($request, Roles::$FARMER);
     }
 
     public function registerUser(Request $request)
     {
-        return $this->saveUserToDb($request,Roles::$USER);
+        return $this->saveUserToDb($request, Roles::$USER);
     }
 
     public function registerMerchant(Request $request)
     {
-        return $this->saveUserToDb($request,Roles::$MERCHANT);
+        return $this->saveUserToDb($request, Roles::$MERCHANT);
     }
 
 }
