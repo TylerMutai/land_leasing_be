@@ -11,6 +11,6 @@ use App\Models\Land;
 class LandsController extends Controller
 {
     public function get(){
-        return LandResource::collection(Land::where('status', LandStatus::$AVAILABLE)->get());
+        return LandResource::collection(Land::where('status', LandStatus::$SOLD)->get());
     }
 }
