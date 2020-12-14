@@ -106,6 +106,7 @@ class LandsController extends Controller
         $landModel->lease_period = $request->input('lease_period');
         $landModel->farmer_id = $user->id;
         $landModel->status = LandStatus::$AVAILABLE;
+        $landModel->active = 0;
         if ($landModel->save()) {
             return new LandResource($landModel);
         }
