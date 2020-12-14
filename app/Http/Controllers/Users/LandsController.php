@@ -25,7 +25,7 @@ class LandsController extends Controller
         $lands = [];
 
         foreach ($userLands as $land) {
-            array_push($lands, new LandResource(Land::find($land->id)));
+            array_push($lands, new LandResource(Land::find($land->land_id)));
         }
 
         return response()->json($lands);
