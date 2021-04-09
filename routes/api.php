@@ -91,7 +91,7 @@ Route::group(['middleware' => ['api_json']], function () {
         Route::post('register', 'Auth\RegistrationController@registerFarmer');
 
         Route::group(['middleware' => ['auth:api', 'verified']], function () {
-            Route::group(['middleware' => ["role:" . Roles::$FARMER]], function () {
+            Route::group(['middleware' => ["role:" . Roles::$LESSOR]], function () {
 
                 //Lands
                 Route::patch('lands', 'Farmers\LandsController@update');

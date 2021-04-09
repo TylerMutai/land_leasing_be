@@ -44,7 +44,7 @@ class RegistrationController extends Controller
 
     public function registerFarmer(Request $request)
     {
-        return $this->saveUserToDb($request, Roles::$FARMER);
+        return $this->saveUserToDb($request, Roles::$LESSOR);
     }
 
     public function registerUser(Request $request)

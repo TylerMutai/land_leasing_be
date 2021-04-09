@@ -16,8 +16,8 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         $role = "";
-        if ($this->hasRole(Roles::$FARMER))
-            $role = Roles::$FARMER;
+        if ($this->hasRole(Roles::$LESSOR))
+            $role = Roles::$LESSOR;
         elseif ($this->hasRole(Roles::$MERCHANT))
             $role = Roles::$MERCHANT;
         elseif ($this->hasRole(Roles::$USER))

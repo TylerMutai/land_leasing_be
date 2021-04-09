@@ -12,7 +12,7 @@ class ACLController extends Controller
     public function create()
     {
         //Create Roles. (web)
-        Role::create(['name' => Roles::$FARMER]);
+        Role::create(['name' => Roles::$LESSOR]);
         Role::create(['name' => Roles::$MERCHANT]);
         Role::create(['name' => Roles::$USER]);
         Role::create(['name' => Roles::$ADMIN]);
