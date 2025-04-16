@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\ACL\Roles;
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Hash;
 

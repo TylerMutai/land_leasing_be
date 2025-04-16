@@ -9,6 +9,8 @@
 - Run `composer install`
 
 - Run `cp .env.example .env`
+- 
+- Run `touch database/land-leasing.db`
 
 - Run `php artisan key:generate`
 
