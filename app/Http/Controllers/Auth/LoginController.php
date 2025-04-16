@@ -28,12 +28,14 @@ class LoginController extends Controller
             $user = Auth::user();
 
             // TODO: Ignore email verification for now.
-            /*if ($user->email_verified_at == null) {
-                event(new Registered($user));
+            if ($user->email_verified_at == null) {
+                $user->email_verified_at = now();
+                $user->save();
+                /*event(new Registered($user));
                 Auth::logout();
                 return response()->json(["message" => "You haven't verified your email. " .
-                    "The verification email has been resent to your email address"], 401);
-            }*/
+                    "The verification email has been resent to your email address"], 401);*/
+            }
 
             if ($user->active == 0) {
                 Auth::logout();

@@ -60,15 +60,13 @@ Route::group(['middleware' => ['api_json']], function () {
     Route::get('blogs/{id}', 'Admin\BlogsController@getDetail');
 
 
-
-
     //User routes
     Route::group(['prefix' => 'users'], function () {
-        
+
         Route::post('register', 'Auth\RegistrationController@registerUser');
-        
+
         Route::group(['middleware' => ['auth:api', 'verified']], function () {
-            Route::group(['middleware' => ["role:" . Roles::$USER]], function () {
+            Route::group(['middleware' => ["role:" . Roles::$USER . "|" . "role:" . Roles::$ADMIN]], function () {
 
                 Route::post('lands/buy', 'Users\LandsController@buy');
 
@@ -94,7 +92,7 @@ Route::group(['middleware' => ['api_json']], function () {
         Route::post('register', 'Auth\RegistrationController@registerFarmer');
 
         Route::group(['middleware' => ['auth:api', 'verified']], function () {
-            Route::group(['middleware' => ["role:" . Roles::$LESSOR]], function () {
+            Route::group(['middleware' => ["role:" . Roles::$LESSOR . "|" . "role:" . Roles::$ADMIN]], function () {
 
                 //Lands
                 Route::patch('lands', 'Farmers\LandsController@update');
@@ -121,7 +119,7 @@ Route::group(['prefix' => 'merchants'], function () {
     Route::post('register', 'Auth\RegistrationController@registerMerchant');
 
     Route::group(['middleware' => ['auth:api']], function () {
-        Route::group(['middleware' => ["role:" . Roles::$MERCHANT]], function () {
+        Route::group(['middleware' => ["role:" . Roles::$MERCHANT . "|" . "role:" . Roles::$ADMIN]], function () {
 
             //Products
             Route::patch('products', 'Merchants\ProductsController@update');
@@ -160,13 +158,11 @@ Route::group(['prefix' => 'admin'], function () {
 
             Route::get('users', 'Admin\UsersController@get');
 
-            Route::get('users/{id}', 'Admin\UsersController@delete');
+            Route::delete('users/{id}', 'Admin\UsersController@delete');
 
         });
     });
 });
-
-Route::get('create-roles-and-permissions', 'ACL\ACLController@create');
 
 
 //Return JSON response for 404 routes.

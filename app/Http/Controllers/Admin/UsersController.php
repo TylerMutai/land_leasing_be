@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
@@ -17,7 +16,7 @@ class UsersController extends Controller
     public function delete($id)
     {
         $user = User::findOrFail($id);
-        if ($user->active === 0) {
+        if ($user->active == 0) {
             $user->active = 1;
         } else {
             $user->active = 0;
