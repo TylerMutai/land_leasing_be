@@ -19,7 +19,7 @@ class LocationsController extends Controller
             $response = $client->post("https://maps.googleapis.com/maps/api/place/textsearch/json", [
                 'query' => [
                     "fields" => "formatted_address,name,geometry,place_id",
-                    "key" => "AIzaSyD-Sgkl8i39IseExgaEdIwWigfqm0OpfAs",
+                    "key" => env("GOOGLE_MAPS_API_KEY"),
                     "query" => $searchQuery,
                     "location" => "-1.28333,36.81667", //Nairobi's longitude and latitude.
                     "radius" => "50000",
@@ -33,7 +33,7 @@ class LocationsController extends Controller
         if ($response->getStatusCode() == 200) {
             return $response->getBody();
         } else {
-	    error_log($response->getBody());
+            error_log($response->getBody());
             return response()->json(['message' => 'Unauthorised. Wrong username or password'], 401);
         }
 

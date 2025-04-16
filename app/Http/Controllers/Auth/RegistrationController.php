@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\ACL\Roles;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Carbon\Carbon;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -34,13 +32,14 @@ class RegistrationController extends Controller
             'phone_number' => $request->phone_number,
             'email' => $request->email,
             'active' => 1,
+            'email_verified_at' => now(),
             'password' => Hash::make($request->password)
         ];
 
-        $user = User::create(userData);
+        $user = User::create($userData);
 
         $user->assignRole($role);
-        event(new Registered($user));
+//        event(new Registered($user));
         return response()->json($user, 201);
     }
 
