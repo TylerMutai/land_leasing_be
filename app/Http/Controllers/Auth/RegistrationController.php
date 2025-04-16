@@ -29,13 +29,15 @@ class RegistrationController extends Controller
             return response()->json($validator->errors(), Response::HTTP_BAD_REQUEST);
         }
 
-        $user = User::create([
+        $userData = [
             'name' => $request->name,
             'phone_number' => $request->phone_number,
             'email' => $request->email,
             'active' => 1,
             'password' => Hash::make($request->password)
-        ]);
+        ];
+
+        $user = User::create(userData);
 
         $user->assignRole($role);
         event(new Registered($user));

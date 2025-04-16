@@ -19,6 +19,7 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    protected $guard_name = 'api';
 
     /**
      * The attributes that are mass assignable.

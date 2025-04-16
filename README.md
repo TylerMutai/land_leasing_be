@@ -2,15 +2,18 @@
 
 **Note:** The project requires a working [Laravel](https://laravel.com/) installation.
 
-1. Clone the repository
-```bash
-git clone https://github.com/TylerMutai/land_leasing_be.git
-```
+-   Clone the repository `git clone https://github.com/TylerMutai/land_leasing_be.git`
 
-2. Run `composer install`
+-   Clone the frontend repository if you haven't already `git clone https://github.com/TylerMutai/land-leasing.git`
 
-3. Run `php artisan key:generate`
+-   Run `composer install`
 
-4. Run `php artisan migrate`
+-   Run `cp .env.example .env`
 
-5. Run `php artisan serve`
+-   Run `php artisan key:generate`
+
+-   Run `php artisan migrate`
+
+-   Run `php artisan serve`
+
+-   Run the frontend app, and login with `admin@test.com` as email and `admin` as password

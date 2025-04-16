@@ -60,10 +60,13 @@ Route::group(['middleware' => ['api_json']], function () {
     Route::get('blogs/{id}', 'Admin\BlogsController@getDetail');
 
 
+
+
     //User routes
     Route::group(['prefix' => 'users'], function () {
+        
         Route::post('register', 'Auth\RegistrationController@registerUser');
-
+        
         Route::group(['middleware' => ['auth:api', 'verified']], function () {
             Route::group(['middleware' => ["role:" . Roles::$USER]], function () {
 
