@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -28,12 +27,13 @@ class LoginController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
 
-            if ($user->email_verified_at == null) {
+            // TODO: Ignore email verification for now.
+            /*if ($user->email_verified_at == null) {
                 event(new Registered($user));
                 Auth::logout();
                 return response()->json(["message" => "You haven't verified your email. " .
                     "The verification email has been resent to your email address"], 401);
-            }
+            }*/
 
             if ($user->active == 0) {
                 Auth::logout();

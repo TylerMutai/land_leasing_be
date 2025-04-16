@@ -1,10 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
-use App\Models\User;
 use App\Http\ACL\Roles;
+use App\Models\User;
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Hash;
 
 class AddDefaultAdmin extends Migration
 {
@@ -19,6 +18,7 @@ class AddDefaultAdmin extends Migration
             'name' => 'admin',
             'phone_number' => '0712345678',
             'email' => 'admin@test.com',
+            'email_verified_at' => now(),
             'active' => 1,
             'password' => Hash::make('admin')
         ];
