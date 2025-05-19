@@ -14,7 +14,7 @@ class AddLeasePeriodFieldToLandsTable extends Migration
     public function up()
     {
         Schema::table('lands', function (Blueprint $table) {
-            $table->string('lease_period');
+            $table->string('lease_period')->nullable();
         });
     }
 

@@ -14,7 +14,7 @@ class AddMerchantIdToProductsTable extends Migration
     public function up()
     {
         Schema::table('products', function (Blueprint $table) {
-            $table->string('merchant_id');
+            $table->string('merchant_id')->nullable();
         });
     }
 
