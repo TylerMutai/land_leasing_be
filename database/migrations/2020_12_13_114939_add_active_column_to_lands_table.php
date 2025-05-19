@@ -14,7 +14,7 @@ class AddActiveColumnToLandsTable extends Migration
     public function up()
     {
         Schema::table('lands', function (Blueprint $table) {
-            $table->boolean('active');
+            $table->boolean('active')->nullable();
         });
     }
 
