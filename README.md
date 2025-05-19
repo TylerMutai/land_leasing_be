@@ -6,7 +6,7 @@
 
 - Clone the frontend repository if you haven't already `git clone https://github.com/TylerMutai/land-leasing.git`
 
-- Run `composer install`
+- Run `composer update`
 
 - Run `cp .env.example .env`
 - 
