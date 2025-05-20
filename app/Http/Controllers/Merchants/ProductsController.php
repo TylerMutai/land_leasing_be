@@ -24,7 +24,7 @@ class ProductsController extends Controller
             'organization_name' => "required",
             'price' => "required|integer",
             'description' => "required",
-            'image' => 'required|image|max:5120'
+            'image' => 'required|mimes:jpg,bmp,png|max:5120'
         ]);
 
         if ($validator->fails()) {

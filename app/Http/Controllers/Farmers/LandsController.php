@@ -50,7 +50,7 @@ class LandsController extends Controller
     public function uploadImage(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image|max:5120',
+            'image' => 'required|mimes:jpg,bmp,png|max:5120',
         ]);
 
         if ($validator->fails()) {
