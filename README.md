@@ -22,6 +22,6 @@
 
 - Run the frontend app, and login with:
 - admin: `admin@test.com` as email and `admin` as password
-- merchant: `metchant@test.com` as email and `merchant` as password
+- merchant: `merchant@test.com` as email and `merchant` as password
 - farmer: `lessor@test.com` as email and `lessor` as password
 - user: `user@test.com` as email and `user` as password
