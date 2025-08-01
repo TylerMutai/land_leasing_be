@@ -24,7 +24,7 @@ class ProductsController extends Controller
             'organization_name' => "required",
             'price' => "required|integer",
             'description' => "required",
-            'image' => 'required|mimes:jpg,bmp,png|max:5120'
+            'image' => 'required|mimes:jpg,jpeg,bmp,png|max:5120'
         ]);
 
         if ($validator->fails()) {
@@ -35,7 +35,6 @@ class ProductsController extends Controller
 
         //Save Product Image to local storage
         $path = "ProductsData/";
-
         $image = $request->file("image");
         $name = "product_image_" . now()->timestamp . "." . $image->extension();
         $image->storeAs($path, $name);
